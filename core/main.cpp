@@ -1,9 +1,8 @@
-#include "graphics\window.h"
+#include "src\graphics\window.h"
 
 int main()
 {
 	Window window("spike", 960, 540);
-
 	while (!window.closed())
 	{
 		window.clear();

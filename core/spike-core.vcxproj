@@ -144,27 +144,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="graphics\shader.cpp" />
-    <ClCompile Include="graphics\window.cpp" />
+    <ClCompile Include="src\graphics\shader.cpp" />
+    <ClCompile Include="src\graphics\window.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="maths\mat4.cpp" />
-    <ClCompile Include="maths\vec2.cpp" />
-    <ClCompile Include="maths\vec3.cpp" />
-    <ClCompile Include="maths\vec4.cpp" />
+    <ClCompile Include="src\maths\mat4.cpp" />
+    <ClCompile Include="src\maths\vec2.cpp" />
+    <ClCompile Include="src\maths\vec3.cpp" />
+    <ClCompile Include="src\maths\vec4.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="graphics\shader.h" />
-    <ClInclude Include="graphics\window.h" />
-    <ClInclude Include="maths\mat4.h" />
-    <ClInclude Include="maths\maths.h" />
-    <ClInclude Include="maths\mathsFunc.h" />
-    <ClInclude Include="maths\vec2.h" />
-    <ClInclude Include="maths\vec3.h" />
-    <ClInclude Include="maths\vec4.h" />
+    <ClInclude Include="src\graphics\shader.h" />
+    <ClInclude Include="src\graphics\window.h" />
+    <ClInclude Include="src\maths\mat4.h" />
+    <ClInclude Include="src\maths\maths.h" />
+    <ClInclude Include="src\maths\mathsFunc.h" />
+    <ClInclude Include="src\maths\vec2.h" />
+    <ClInclude Include="src\maths\vec3.h" />
+    <ClInclude Include="src\maths\vec4.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\basic.frag" />
-    <None Include="shaders\basic.vert" />
+    <None Include="src\shaders\basic.frag" />
+    <None Include="src\shaders\basic.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
