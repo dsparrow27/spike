@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\maths\vec4.cpp">
+      <Filter>mathSource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\maths\vec3.cpp">
+      <Filter>mathSource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\maths\vec2.cpp">
+      <Filter>mathSource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\maths\mat4.cpp">
+      <Filter>mathSource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\shader.cpp">
+      <Filter>shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\buffers\buffer.cpp">
+      <Filter>graphicsSource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\buffers\indexBuffer.cpp">
+      <Filter>graphicsSource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\buffers\vertexArray.cpp">
+      <Filter>graphicsSource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\window.cpp">
+      <Filter>graphicsSource</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\maths\mat4.h">
+      <Filter>mathsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths\maths.h">
+      <Filter>mathsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths\mathsFunc.h">
+      <Filter>mathsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths\vec2.h">
+      <Filter>mathsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths\vec3.h">
+      <Filter>mathsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths\vec4.h">
+      <Filter>mathsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\window.h">
+      <Filter>graphicsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\shader.h">
+      <Filter>graphicsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\buffers\buffer.h">
+      <Filter>graphicsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\buffers\indexBuffer.h">
+      <Filter>graphicsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\buffers\vertexArray.h">
+      <Filter>graphicsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fileUtils.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shaders\basic.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="src\shaders\basic.vert">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="graphicsHeaders">
+      <UniqueIdentifier>{9ecaed67-f775-47bd-9b80-b52b5d1b9076}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mathsHeaders">
+      <UniqueIdentifier>{214a52f0-4fec-41c8-8239-4da6338632c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{513b1b01-3b5f-4940-a944-18cbe4353414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers">
+      <UniqueIdentifier>{3b8a58cc-023b-4364-88fb-7a036c661aa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mathSource">
+      <UniqueIdentifier>{5af88110-5905-46b5-a6db-0e41c9998d26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="graphicsSource">
+      <UniqueIdentifier>{56ff020f-afef-48e0-aaab-d2de2bcc0677}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
