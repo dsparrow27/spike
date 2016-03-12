@@ -12,11 +12,11 @@ Shader class that loads a vert and frag shader and optional geometry shader
 class Shader
 {
 private:
-	GLuint mShaderId;
+	GLuint program;
 	const char* mVertPath;
 	const char* mFragPath;
 	const char* mGeometryPath;
-	GLuint program;
+
 public:
 	Shader(const char* vertPath, const char* fragPath, const char* geometryPath = nullptr);
 	~Shader();
@@ -31,10 +31,9 @@ public:
 	void enable() const;
 	void disable() const;
 
-	
 private:
 	GLuint load();
 	void checkCompileErrors(GLuint shader, std::string type);
-	GLuint getUniformLocation(const GLchar* name);
+	GLint getUniformLocation(const GLchar* name);
 	
 };

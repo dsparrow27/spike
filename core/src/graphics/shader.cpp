@@ -4,16 +4,16 @@ Shader::Shader(const char* vertPath, const char* fragPath, const char* geometryP
 	:mVertPath(vertPath), mFragPath(fragPath), mGeometryPath(geometryPath)
 {
 	/*Initializes the shader paths and calls load*/
-	mShaderId = load();
+	load();
 }
 Shader::~Shader()
 {
 	/*Deletes the shader program using the shaderId*/
-	glDeleteProgram(mShaderId);
+	glDeleteProgram(this->program);
 }
 void Shader::enable() const
 {
-	glUseProgram(mShaderId);
+	glUseProgram(this->program);
 }
 void Shader::disable() const
 {
@@ -91,9 +91,9 @@ void Shader::checkCompileErrors(GLuint shader, std::string type)
 	}
 }
 
-GLuint Shader::getUniformLocation(const GLchar* name)
+GLint Shader::getUniformLocation(const GLchar* name)
 {
-	return glGetUniformLocation(mShaderId, name);
+	return glGetUniformLocation(this->program, name);
 }
 
 void Shader::setUniform1f(const GLchar* name, float value)

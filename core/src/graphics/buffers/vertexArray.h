@@ -4,21 +4,16 @@
 #include "buffer.h"
 
 
-namespace spike { 
-	namespace graphics 
-	{
-		class VertexArray
-		{
-		private:
-			GLuint mArrayId;
-			std::vector<Buffer*> mBuffers;
-		public:
-			VertexArray();
-			~VertexArray();
-			void addBuffer(Buffer* buffer, GLuint index);
-			void bind() const;
-			void unBind() const;
+class VertexArray
+{
+private:
+	GLuint mArrayId;
+	std::vector<Buffer*> mBuffers;
+public:
+	VertexArray();
+	~VertexArray();
+	void addBuffer(Buffer* buffer, GLuint index);
+	void bind() const;
+	void unbind() const;
 
-		};
-	}
-}
+};

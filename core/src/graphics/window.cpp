@@ -49,7 +49,9 @@ bool Window::init()
 	glfwMakeContextCurrent(mWindow);
 	glfwSetWindowUserPointer(mWindow, this);
 	glfwSetWindowSizeCallback(mWindow, windowResize);  // window resize callback
-
+	//glfwSetKeyCallback(mWindow, key_callback);
+	glfwSetMouseButtonCallback(mWindow, mouse_button_callback);
+	glfwSetCursorPosCallback(mWindow, cursor_position_callback);
 
 	if (glewInit() != GLEW_OK)
 	{
@@ -95,6 +97,11 @@ void Window::clear() const
 }
 void Window::update()
 {
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		std::cout << "Open GL Window Error" << error << std::endl;
+	}
 	glfwPollEvents();
 	glfwSwapBuffers(mWindow);
 }

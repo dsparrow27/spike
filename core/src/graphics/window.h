@@ -18,7 +18,8 @@ private:
 			
 	bool mKeys[MAX_KEYS];
 	bool mMouseButtons[MAX_BUTTONS];
-	double mx, my;
+	double mx, my; // xy positions of the window
+
 public:
 	Window(const char *name, int width, int height);
 	~Window();
