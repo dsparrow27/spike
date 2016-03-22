@@ -98,28 +98,28 @@ GLint Shader::getUniformLocation(const GLchar* name)
 
 void Shader::setUniform1f(const GLchar* name, float value)
 {
-	return glUniform1f(getUniformLocation(name), value);
+	glUniform1f(getUniformLocation(name), value);
 }
 
 void Shader::setUniform1i(const GLchar* name, int value)
 {
-	return glUniform1f(getUniformLocation(name), value);
+	glUniform1f(getUniformLocation(name), value);
 }
 
 void Shader::setUniform2f(const GLchar* name, const Vec2& vector)
 {
-	return glUniform2f(getUniformLocation(name), vector.x, vector.y);
+	glUniform2f(getUniformLocation(name), vector.x, vector.y);
 }
 
 void Shader::setUniform3f(const GLchar* name, const Vec3& vector)
 {
-	return glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
+	glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
 }
 void Shader::setUniform4f(const GLchar* name, const Vec4& vector)
 {
-	return glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
+	glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
 }
 void Shader::setUniformMat4(const GLchar* name, const Mat4& matrix)
 {
-	return glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, matrix.elements);
+	glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, matrix.elements);
 }

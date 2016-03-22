@@ -12,7 +12,8 @@ struct Vec2
 	Vec2();
 	// second constructor that accepts two floats
 	Vec2(const float& x, const float& y);
-
+	float length();
+	Vec2& normalize();
 	Vec2& add(const Vec2& other);
 	Vec2& subtract(const Vec2& other);
 	Vec2& multiply(const Vec2& other);

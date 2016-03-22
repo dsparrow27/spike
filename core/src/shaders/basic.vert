@@ -1,15 +1,16 @@
 #version 330 core
-
 layout (location = 0) in vec4 position;
-
-uniform mat4 pr_matrix;
-uniform mat4 vw_matrix = mat4(1.0);
-uniform mat4 ml_matrix = mat4(1.0);
-
-out vec4 pos;
+layout (location = 1) in vec4 color;
+layout (location = 2) in vec2 texCoord;
+uniform mat4 projMatrix;
+uniform mat4 viewMatrix  = mat4(1.0);
+uniform mat4 modelMatrix  = mat4(1.0);
+out vec4 ourColor;
+out vec2 TexCoord;
 
 void main()
 {
-	gl_Position = pr_matrix * vw_matrix * ml_matrix * position;
-	pos = ml_matrix * position;
+    gl_Position = projMatrix * viewMatrix * modelMatrix * position;;
+    ourColor = color;
+    TexCoord = texCoord;
 }

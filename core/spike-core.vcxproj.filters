@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="src\maths\vec4.cpp">
       <Filter>mathSource</Filter>
     </ClCompile>
@@ -29,6 +28,9 @@
     <ClCompile Include="src\graphics\buffers\elementBuffer.cpp">
       <Filter>graphicsSource</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\texture.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\graphics\camera\camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\maths\mat4.h">
@@ -65,6 +67,8 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\buffers\elementBuffer.h" />
+    <ClInclude Include="src\graphics\texture.h" />
+    <ClInclude Include="src\graphics\camera\camera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\basic.frag">

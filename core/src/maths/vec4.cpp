@@ -111,6 +111,6 @@ Vec4& Vec4::divide(const Vec4& other)
 std::ostream& operator<<(std::ostream& stream, const Vec4& vector)
 {
 	//create a string version of vector
-	stream << "Vec4 ::(" << vector.x << vector.y << ")";
+	stream << "Vec4 ::(" <<","<< vector.x << "," << vector.y << "," << vector.z << "," << vector.w <<")";
 	return stream;
 }

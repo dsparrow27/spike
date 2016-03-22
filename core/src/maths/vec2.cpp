@@ -12,7 +12,17 @@ Vec2::Vec2(const float& x, const float& y)
 	this->x = x;
 	this->y = y;
 }
-
+float Vec2::length()
+{
+	return sqrt(this->x * this->x + this->y* this->y);
+}
+Vec2& Vec2::normalize()
+{
+	float vlength = length();
+	this->x /= vlength;
+	this->y /= vlength;
+	return *this;
+}
 bool Vec2::operator==(const Vec2& other)
 {
 	return this->x == other.x && this->y == other.y;
@@ -106,6 +116,6 @@ Vec2& Vec2::divide(const Vec2& other)
 std::ostream& operator<<(std::ostream& stream, const Vec2& vector)
 {
 	//create a string version of vector
-	stream << "Vec2 ::(" << vector.x << vector.y << ")";
+	stream << "Vec2 ::(" << "," << vector.x << "," << vector.y << ")";
 	return stream;
 }

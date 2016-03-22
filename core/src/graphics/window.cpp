@@ -3,11 +3,9 @@
 
 void windowResize(GLFWwindow * window, int width, int height);
 Window::Window(const char *name, int width, int height)
+	:mTitle(name), mWidth(width), mHeight(height)
 {
 	/*Window constructor calls on inital method*/
-	mTitle = name; //window name
-	mWidth = width; // window width
-	mHeight = height; // window height
 	if (!init())
 	{
 		glfwTerminate();
@@ -38,6 +36,10 @@ bool Window::init()
 		std::cout << "Failed to initalize GLFW" << std::endl;
 		return false;
 	}
+	
+	
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	
 	// create the window
 	mWindow = glfwCreateWindow(mWidth, mHeight, mTitle, NULL, NULL);
 	if (!mWindow)
@@ -48,17 +50,16 @@ bool Window::init()
 			
 	glfwMakeContextCurrent(mWindow);
 	glfwSetWindowUserPointer(mWindow, this);
-	glfwSetWindowSizeCallback(mWindow, windowResize);  // window resize callback
-	//glfwSetKeyCallback(mWindow, key_callback);
+	glfwSetWindowSizeCallback(mWindow, windowResize);
+	glfwSetKeyCallback(mWindow, key_callback);
 	glfwSetMouseButtonCallback(mWindow, mouse_button_callback);
 	glfwSetCursorPosCallback(mWindow, cursor_position_callback);
-
+	glfwSwapInterval(0.0);
 	if (glewInit() != GLEW_OK)
 	{
 		std::cout << "Could not initialize GLEW" << std::endl;
 		return false;
 	}
-	std::cout << "OPENGL" << glGetString(GL_VERSION) << std::endl;
 	return true;
 }
 bool Window::isKeyPressed(unsigned int keycode) const
@@ -121,7 +122,7 @@ void windowResize(GLFWwindow *window, int width, int height)
 void key_callback(GLFWwindow* window, int key, int scanCode, int action, int mods)
 {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
-	win->mMouseButtons[key] = action != GLFW_RELEASE;
+	win->mKeys[key] = action != GLFW_RELEASE;
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
