@@ -59,6 +59,13 @@ Vec2& Vec2::operator*(const Vec2& other)
 {
 	return multiply(other);
 }
+Vec2& Vec2::operator*(float scalar)
+{
+	scalar * this->x;
+	scalar * this->y;
+
+	return *this;
+}
 
 Vec2& Vec2::operator/(const Vec2& other)
 {

@@ -52,6 +52,7 @@ int main()
 
 	Texture texture("");
 	texture.activate();
+
 	while (!window.closed())
 	{
 		window.clear();

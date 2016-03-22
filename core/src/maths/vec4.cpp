@@ -46,7 +46,14 @@ Vec4& Vec4::operator*(const Vec4& other)
 {
 	return multiply(other);
 }
-
+Vec4& Vec4::operator*(float scalar)
+{
+	scalar * this->x;
+	scalar * this->y;
+	scalar * this->z;
+	scalar * this->w;
+	return *this;
+}
 Vec4& Vec4::operator/(const Vec4& other)
 {
 	return divide(other);
