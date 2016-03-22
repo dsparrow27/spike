@@ -34,7 +34,7 @@ int main()
 
 	GLushort indices[] = { 0,1,2,2,3,0 };
 
-	Window window("Sparky!", 960, 540);
+	Window window("spike!", 960, 540);
 
 	Mat4 ortho = Mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);// left, right, bottom, top, distance near and far
 	VertexArray VAO;
@@ -46,13 +46,11 @@ int main()
 
 	Shader shader("src/shaders/basic.vert", "src/shaders/basic.frag");
 	shader.enable();
-	Mat4 test;
-	test.rotation(30, Vec3(1,0,0));
 	
 	shader.setUniformMat4("projMatrix", ortho);
 	shader.setUniformMat4("modelMatrix", Mat4::translation(Vec3(8,3,0)));
 
-	Texture texture("D:/spike/core/src/wall.jpg");
+	Texture texture("");
 	texture.activate();
 	while (!window.closed())
 	{
