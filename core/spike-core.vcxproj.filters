@@ -28,18 +28,15 @@
     <ClCompile Include="src\graphics\buffers\elementBuffer.cpp">
       <Filter>graphicsSource</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\graphics\camera\camera.cpp" />
+    <ClCompile Include="src\graphics\model.cpp" />
+    <ClCompile Include="src\graphics\mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\maths\mat4.h">
-      <Filter>mathsHeaders</Filter>
+    <ClInclude Include="src\utils\fileUtils.h">
+      <Filter>headers</Filter>
     </ClInclude>
-    <ClInclude Include="src\maths\maths.h">
-      <Filter>mathsHeaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\maths\mathsFunc.h">
+    <ClInclude Include="src\maths\vec4.h">
       <Filter>mathsHeaders</Filter>
     </ClInclude>
     <ClInclude Include="src\maths\vec2.h">
@@ -48,35 +45,38 @@
     <ClInclude Include="src\maths\vec3.h">
       <Filter>mathsHeaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\maths\vec4.h">
+    <ClInclude Include="src\maths\mat4.h">
       <Filter>mathsHeaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\window.h">
-      <Filter>graphicsHeaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\shader.h">
-      <Filter>graphicsHeaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\buffers\buffer.h">
-      <Filter>graphicsHeaders</Filter>
+    <ClInclude Include="src\maths\maths.h">
+      <Filter>mathsHeaders</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\buffers\vertexArray.h">
       <Filter>graphicsHeaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\fileUtils.h">
-      <Filter>headers</Filter>
-    </ClInclude>
     <ClInclude Include="src\graphics\buffers\elementBuffer.h" />
-    <ClInclude Include="src\graphics\texture.h" />
-    <ClInclude Include="src\graphics\camera\camera.h" />
+    <ClInclude Include="src\graphics\buffers\buffer.h">
+      <Filter>graphicsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths\mathsFunc.h">
+      <Filter>mathsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\shader.h">
+      <Filter>graphicsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\window.h">
+      <Filter>graphicsHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\rendering\renderable2d.h" />
+    <ClInclude Include="src\graphics\rendering\renderer2d.h" />
+    <ClInclude Include="src\graphics\mesh.h" />
+    <ClInclude Include="src\graphics\model.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\basic.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="src\shaders\basic.vert">
-      <Filter>shaders</Filter>
-    </None>
+    <None Include="src\shaders\colors.frag" />
+    <None Include="src\shaders\lamp.frag" />
+    <None Include="src\shaders\colors.vert" />
+    <None Include="src\shaders\lamp.vert" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphicsHeaders">

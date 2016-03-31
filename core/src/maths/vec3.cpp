@@ -64,9 +64,9 @@ Vec3& Vec3::operator*(const Vec3& other)
 }
 Vec3& Vec3::operator*(float scalar)
 {
-	scalar * this->x;
-	scalar * this->y;
-	scalar * this->z;
+	this->x = scalar * this->x;
+	this->y = scalar * this->y;
+	this->z = scalar * this->z;
 	return *this;
 }
 Vec3& Vec3::operator/(const Vec3& other)
@@ -129,6 +129,6 @@ Vec3& Vec3::divide(const Vec3& other)
 std::ostream& operator<<(std::ostream& stream, const Vec3& vector)
 {
 	//create a string version of vector
-	stream << "Vec3 ::(" << "," << vector.x << "," << vector.y << "," << vector.z << ")";
+	stream << "Vec3 ::(" << vector.x << "," << vector.y << "," << vector.z << ")";
 	return stream;
 }

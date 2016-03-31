@@ -7,6 +7,7 @@ class ElementBuffer
 	GLuint mBufferId;
 	GLuint mCount;
 public:
+	ElementBuffer() { };
 	ElementBuffer(GLushort* data, GLsizei count);
 	ElementBuffer(GLuint* data, GLsizei count);
 	~ElementBuffer();

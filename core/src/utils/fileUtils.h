@@ -62,7 +62,7 @@ public:
 		//get the image width and height
 		*width = FreeImage_GetWidth(dib);
 		*height = FreeImage_GetHeight(dib);
-
+		
 		return result;
 	}
 };

@@ -61,8 +61,8 @@ Vec2& Vec2::operator*(const Vec2& other)
 }
 Vec2& Vec2::operator*(float scalar)
 {
-	scalar * this->x;
-	scalar * this->y;
+	this->x = scalar * this->x;
+	this->y = scalar * this->y;
 
 	return *this;
 }

@@ -26,8 +26,8 @@ struct Mat4
 
 	static Mat4 orthographic(float left, float right, float top, float bottom, float near, float far);
 	static Mat4 perspective(float fov, float aspectRatio, float near, float far);
-	static Mat4 translation(const Vec3& translation);
-	static Mat4 rotation(float angle, const Vec3& axis);
+	static Mat4 translate(const Vec3& translation);
+	static Mat4 rotate(float angle, const Vec3& axis);
 	static Mat4 scale(const Vec3& scale);
 	
 	bool operator==(const Mat4& other);

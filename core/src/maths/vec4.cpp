@@ -48,10 +48,10 @@ Vec4& Vec4::operator*(const Vec4& other)
 }
 Vec4& Vec4::operator*(float scalar)
 {
-	scalar * this->x;
-	scalar * this->y;
-	scalar * this->z;
-	scalar * this->w;
+	this->x = scalar * this->x;
+	this->y = scalar * this->y;
+	this->z = scalar * this->z;
+	this->w = scalar * this->w;
 	return *this;
 }
 Vec4& Vec4::operator/(const Vec4& other)

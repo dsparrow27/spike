@@ -11,21 +11,27 @@ class Window
 {
 private:
 	//windows settings
-	int mWidth, mHeight; // window height/ width
-	const char *mTitle; //window title
-	GLFWwindow *mWindow; // window pointer
 	bool mClosed; // is window closed
-			
 	bool mKeys[MAX_KEYS];
 	bool mMouseButtons[MAX_BUTTONS];
-	double mx, my; // xy positions of the window
+	bool mIsResizeable;
 
 public:
+	GLFWwindow *mWindow; // window pointer
+	int mWidth, mHeight; // window height/ width
+	const char *mTitle; //window title
+	double mx, my; // xy positions of the window
 	Window(const char *name, int width, int height);
 	~Window();
 	bool closed() const; // for closing our window
 	void clear() const;
 	void update();
+	void enableDepth();
+	void setResizeable(bool state);
+	bool isResizable(bool state);
+	void drawWireframe(bool state);
+	void setCullingType(const char* cullType) const;
+	
 	// getters
 	inline int getWidth() const { return mWidth; };
 	inline int getHeight() const { return mHeight; };

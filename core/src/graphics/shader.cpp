@@ -9,11 +9,11 @@ Shader::Shader(const char* vertPath, const char* fragPath, const char* geometryP
 Shader::~Shader()
 {
 	/*Deletes the shader program using the shaderId*/
-	glDeleteProgram(this->program);
+	glDeleteProgram(program);
 }
 void Shader::enable() const
 {
-	glUseProgram(this->program);
+	glUseProgram(program);
 }
 void Shader::disable() const
 {
@@ -93,7 +93,7 @@ void Shader::checkCompileErrors(GLuint shader, std::string type)
 
 GLint Shader::getUniformLocation(const GLchar* name)
 {
-	return glGetUniformLocation(this->program, name);
+	return glGetUniformLocation(program, name);
 }
 
 void Shader::setUniform1f(const GLchar* name, float value)

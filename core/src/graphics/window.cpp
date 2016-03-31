@@ -36,9 +36,8 @@ bool Window::init()
 		std::cout << "Failed to initalize GLFW" << std::endl;
 		return false;
 	}
-	
-	
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 	
 	// create the window
 	mWindow = glfwCreateWindow(mWidth, mHeight, mTitle, NULL, NULL);
@@ -47,7 +46,7 @@ bool Window::init()
 		std::cout << "Could not load GLFW window" << std::endl;
 		return false;
 	}
-			
+	glewExperimental = GL_TRUE;
 	glfwMakeContextCurrent(mWindow);
 	glfwSetWindowUserPointer(mWindow, this);
 	glfwSetWindowSizeCallback(mWindow, windowResize);
@@ -61,6 +60,50 @@ bool Window::init()
 		return false;
 	}
 	return true;
+}
+// settings
+void Window::enableDepth()
+{
+	glEnable(GL_DEPTH_TEST);
+}
+void Window::drawWireframe(bool state)
+{
+	if (state)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+}
+void Window::setResizeable(bool state)
+{
+	if (state)
+	{
+		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+	}
+	else
+	{
+		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	}
+	mIsResizeable = state;
+}
+
+bool Window::isResizable(bool state)
+{
+	return mIsResizeable;
+}
+void Window::setCullingType(const char* cullType) const
+{
+	if (cullType == "back")
+	{
+		glCullFace(GL_BACK);
+	}
+	else
+	{
+		glCullFace(GL_FRONT);
+	}
 }
 bool Window::isKeyPressed(unsigned int keycode) const
 {
@@ -95,14 +138,10 @@ void Window::getMousePosition(double&x, double& y) const
 void Window::clear() const
 {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	//glClearColor(0.5f, 0.5f, 0.8f, 1.0f);
 }
 void Window::update()
 {
-	GLenum error = glGetError();
-	if (error != GL_NO_ERROR)
-	{
-		std::cout << "Open GL Window Error" << error << std::endl;
-	}
 	glfwPollEvents();
 	glfwSwapBuffers(mWindow);
 }
@@ -123,6 +162,16 @@ void key_callback(GLFWwindow* window, int key, int scanCode, int action, int mod
 {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
 	win->mKeys[key] = action != GLFW_RELEASE;
+
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	if (key >= 0 && key < 1024)
+	{
+		if (action == GLFW_PRESS)
+			win->mKeys[key] = true;
+		else if (action == GLFW_RELEASE)
+			win->mKeys[key] = false;
+	}
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
