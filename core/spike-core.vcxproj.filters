@@ -31,6 +31,8 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\graphics\model.cpp" />
     <ClCompile Include="src\graphics\mesh.cpp" />
+    <ClCompile Include="src\graphics\camera.cpp" />
+    <ClCompile Include="src\maths\quaternion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\fileUtils.h">
@@ -71,12 +73,14 @@
     <ClInclude Include="src\graphics\rendering\renderer2d.h" />
     <ClInclude Include="src\graphics\mesh.h" />
     <ClInclude Include="src\graphics\model.h" />
+    <ClInclude Include="src\graphics\camera.h" />
+    <ClInclude Include="src\maths\quaternion.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\colors.frag" />
     <None Include="src\shaders\lamp.frag" />
-    <None Include="src\shaders\colors.vert" />
     <None Include="src\shaders\lamp.vert" />
+    <None Include="src\shaders\phong.frag" />
+    <None Include="src\shaders\phong.vert" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphicsHeaders">

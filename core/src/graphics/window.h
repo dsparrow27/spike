@@ -3,7 +3,7 @@
 #include <iostream>
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
-
+#include "camera.h"
 #define MAX_KEYS 1024
 #define MAX_BUTTONS 32
 
@@ -15,6 +15,7 @@ private:
 	bool mKeys[MAX_KEYS];
 	bool mMouseButtons[MAX_BUTTONS];
 	bool mIsResizeable;
+	Camera mCamera;
 
 public:
 	GLFWwindow *mWindow; // window pointer
@@ -31,7 +32,7 @@ public:
 	bool isResizable(bool state);
 	void drawWireframe(bool state);
 	void setCullingType(const char* cullType) const;
-	
+	void setCamera(const Camera camera);
 	// getters
 	inline int getWidth() const { return mWidth; };
 	inline int getHeight() const { return mHeight; };
@@ -43,8 +44,8 @@ public:
 private:
 	bool init(); // initialize the window
 	// set up callbacks
-	friend static void key_callback(GLFWwindow* window, int key, int scanCode, int action, int mods);
-	friend static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-	friend static void cursor_position_callback(GLFWwindow* window, double xPos, double yPos);
-	//friend static void mouse_scroll_callback(GLFWwindow* window, double xPos, double yPos);
+	friend void key_callback(GLFWwindow* window, int key, int scanCode, int action, int mods);
+	friend void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+	friend void cursor_position_callback(GLFWwindow* window, double xPos, double yPos);
+	friend void mouse_scroll_callback(GLFWwindow* window, double xPos, double yPos) { mCamera.zoom(yPos); }
 };

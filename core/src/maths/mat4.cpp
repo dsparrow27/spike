@@ -1,5 +1,4 @@
 #include "mat4.h"
-
 Mat4::Mat4()
 {
 	for (int i = 0; i < 4 * 4; i++)

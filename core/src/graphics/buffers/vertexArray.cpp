@@ -13,12 +13,12 @@ VertexArray::~VertexArray()
 	}
 	glDeleteVertexArrays(1, &mArrayId);
 }
-void VertexArray::addBuffer(Buffer* buffer, GLuint index)
+void VertexArray::addBuffer(Buffer* buffer, GLuint index, GLsizei stride, const void *attribPointer)
 {
 	//index == shader index eg. position = 0, color == 1 etc
 	bind();
 	buffer->bind();
-	glVertexAttribPointer(index, buffer->getComponentCount(), GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(index, buffer->getComponentCount(), GL_FLOAT, GL_FALSE, stride, &attribPointer);
 	glEnableVertexAttribArray(index);
 	buffer->unbind();
 	unbind();

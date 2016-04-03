@@ -12,7 +12,7 @@ private:
 public:
 	VertexArray();
 	~VertexArray();
-	void addBuffer(Buffer* buffer, GLuint index);
+	void addBuffer(Buffer* buffer, GLuint index, GLsizei stride, const void *attribPointer);
 	void bind() const;
 	void unbind() const;
 

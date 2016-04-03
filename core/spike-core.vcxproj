@@ -155,12 +155,14 @@
     <ClCompile Include="src\graphics\buffers\buffer.cpp" />
     <ClCompile Include="src\graphics\buffers\elementBuffer.cpp" />
     <ClCompile Include="src\graphics\buffers\vertexArray.cpp" />
+    <ClCompile Include="src\graphics\camera.cpp" />
     <ClCompile Include="src\graphics\mesh.cpp" />
     <ClCompile Include="src\graphics\model.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\graphics\window.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\maths\mat4.cpp" />
+    <ClCompile Include="src\maths\quaternion.cpp" />
     <ClCompile Include="src\maths\vec2.cpp" />
     <ClCompile Include="src\maths\vec3.cpp" />
     <ClCompile Include="src\maths\vec4.cpp" />
@@ -169,6 +171,7 @@
     <ClInclude Include="src\graphics\buffers\buffer.h" />
     <ClInclude Include="src\graphics\buffers\elementBuffer.h" />
     <ClInclude Include="src\graphics\buffers\vertexArray.h" />
+    <ClInclude Include="src\graphics\camera.h" />
     <ClInclude Include="src\graphics\mesh.h" />
     <ClInclude Include="src\graphics\model.h" />
     <ClInclude Include="src\graphics\rendering\renderable2d.h" />
@@ -178,14 +181,15 @@
     <ClInclude Include="src\maths\mat4.h" />
     <ClInclude Include="src\maths\maths.h" />
     <ClInclude Include="src\maths\mathsFunc.h" />
+    <ClInclude Include="src\maths\quaternion.h" />
     <ClInclude Include="src\maths\vec2.h" />
     <ClInclude Include="src\maths\vec3.h" />
     <ClInclude Include="src\maths\vec4.h" />
     <ClInclude Include="src\utils\fileUtils.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\colors.frag" />
-    <None Include="src\shaders\colors.vert" />
+    <None Include="src\shaders\phong.frag" />
+    <None Include="src\shaders\phong.vert" />
     <None Include="src\shaders\lamp.frag" />
     <None Include="src\shaders\lamp.vert" />
   </ItemGroup>

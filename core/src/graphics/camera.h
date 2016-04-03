@@ -1,133 +1,41 @@
-#pragma once
-
-// Std. Includes
-//#include <vector>
-
-// GL Includes
-//#include <GL/glew.h>
-//#include <glm/glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
 #include "../maths/maths.h"
-
-
-// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
-enum Camera_Movement {
-    FORWARD,
-    BACKWARD,
-    LEFT,
-    RIGHT
-};
-
-// Default camera values
-const float YAW        = -90.0f;
-const float PITCH      =  0.0f;
-const float SPEED      =  3.0f;
-const float SENSITIVTY =  0.25f;
-const float ZOOM       =  45.0f;
-
-
-// An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
+/*
+	Base class for all cameras , inherented camera should override focusPoint and update
+*/
 class Camera
 {
 public:
-    // Camera Attributes
-    Vec3 Position;
-    Vec3 Front;
-	Vec3 Up;
-	Vec3 Right;
-	Vec3 WorldUp;
-    // Eular Angles
-    float Yaw;
-    float Pitch;
-    // Camera options
-    float MovementSpeed;
-    float MouseSensitivity;
-    float Zoom;
+	//members
+	Mat4 mViewMatrix, mProjectionMatrix;
+	Vec3 mPosition, mRotation, mFocalPoint, mWorldUp;
+	float mYaw, mPitch, mMovementSpeed, mSensitivity, mZoom;
 
-    // Constructor with vectors
-    Camera(Vec3 position = Vec3(0.0f, 0.0f, 0.0f), Vec3 up = Vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(Vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVTY), Zoom(ZOOM)
-    {
-        this->Position = position;
-        this->WorldUp = up;
-        this->Yaw = yaw;
-        this->Pitch = pitch;
-        this->updateCameraVectors();
-    }
-    // Constructor with scalar values
-    Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(Vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVTY), Zoom(ZOOM)
-    {
-        this->Position = Vec3(posX, posY, posZ);
-        this->WorldUp = Vec3(upX, upY, upZ);
-        this->Yaw = yaw;
-        this->Pitch = pitch;
-        this->updateCameraVectors();
-    }
+public:
+	
+	Camera() {}
+	Camera(const Mat4& projectionMatrix);
 
-    // Returns the view matrix calculated using Eular Angles and the LookAt Matrix
-    Mat4 GetViewMatrix()
-    {
-        return glm::lookAt(this->Position, this->Position + this->Front, this->Up);
-    }
+	virtual void focusPoint() {}
+	virtual void update() {}
+	void zoom(float delta);
+	//getter methods
+	inline const Vec3& getPosition() const { return mPosition; }
+	inline const Vec3& getRotation() const { return mRotation; }
+	inline const Vec3& getFocalPoint() const { return mFocalPoint; }
+	inline const Mat4& getViewMatrix() const { return mViewMatrix; }
 
-    // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-    void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
-    {
-        GLfloat velocity = this->MovementSpeed * deltaTime;
-        if (direction == FORWARD)
-            this->Position += this->Front * velocity;
-        if (direction == BACKWARD)
-            this->Position -= this->Front * velocity;
-        if (direction == LEFT)
-            this->Position -= this->Right * velocity;
-        if (direction == RIGHT)
-            this->Position += this->Right * velocity;
-    }
+	Vec3 getUpDirection();
+	Vec3 getRightDirection();
+	Vec3 getLeftDirection();
 
-    // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-    void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch = true)
-    {
-        xoffset *= this->MouseSensitivity;
-        yoffset *= this->MouseSensitivity;
+	//setter methods
+	inline void setPosition(const Vec3 position) { mPosition = position; }
+	inline void setRotation(const Vec3 rotation) { mRotation = rotation; }
 
-        this->Yaw   += xoffset;
-        this->Pitch += yoffset;
+	//modifiers
+	inline void translate(const Vec3& translation) { mPosition += translation; }
+	inline void rotate(const Vec3& rotation) { mRotation += rotation; }
+	inline void translate(float x, float y, float z) { mPosition += Vec3(x,y,z); }
+	inline void rotate(float x, float y, float z) { mRotation += Vec3(x,y,z); }
 
-        // Make sure that when pitch is out of bounds, screen doesn't get flipped
-        if (constrainPitch)
-        {
-            if (this->Pitch > 89.0f)
-                this->Pitch = 89.0f;
-            if (this->Pitch < -89.0f)
-                this->Pitch = -89.0f;
-        }
-
-        // Update Front, Right and Up Vectors using the updated Eular angles
-        this->updateCameraVectors();
-    }
-
-    // Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
-    void ProcessMouseScroll(GLfloat yoffset)
-    {
-        if (this->Zoom >= 1.0f && this->Zoom <= 45.0f)
-            this->Zoom -= yoffset;
-        if (this->Zoom <= 1.0f)
-            this->Zoom = 1.0f;
-        if (this->Zoom >= 45.0f)
-            this->Zoom = 45.0f;
-    }
-
-private:
-    // Calculates the front vector from the Camera's (updated) Eular Angles
-    void updateCameraVectors()
-    {
-        // Calculate the new Front vector
-        glm::vec3 front;
-        front.x = cos(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
-        front.y = sin(glm::radians(this->Pitch));
-        front.z = sin(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
-        this->Front = glm::normalize(front);
-        // Also re-calculate the Right and Up vector
-        this->Right = glm::normalize(glm::cross(this->Front, this->WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-        this->Up    = glm::normalize(glm::cross(this->Right, this->Front));
-    }
 };

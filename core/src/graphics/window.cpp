@@ -77,6 +77,10 @@ void Window::drawWireframe(bool state)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 }
+void Window::setCamera(Camera camera)
+{
+	mCamera = camera;
+}
 void Window::setResizeable(bool state)
 {
 	if (state)

@@ -28,6 +28,7 @@ void Model::loadModel(std::string path)
 	}
 	// retrieve the path of the file
 	this->mDirectory = path.substr(0, path.find_last_of("/"));
+	
 	//process root node recursively
 	this->processNode(scene->mRootNode, scene);
 }
@@ -60,6 +61,20 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		Vertex vertex;
 		//positions
 		vertex.position = Vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+		if (mesh->HasNormals())
+		{
+		vertex.normal = Vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+		}
+		/*
+		if (mesh->mTextureCoords[0])
+		{
+			vertex.texCoords = Vec3(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y, mesh->mTextureCoords[0][i].z);
+		}
+		else
+		{
+			vertex.texCoords = Vec3(0.0, 0.0, 0.0);
+		}
+		*/
 		vertices.push_back(vertex);
 	}
 	//retrive the vertice indices for each face
