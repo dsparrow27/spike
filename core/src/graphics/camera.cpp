@@ -33,15 +33,15 @@ void Camera::zoom(float delta)
 
 Vec3 Camera::getUpDirection()
 {
-
+	return Vec3();
 }
 
 Vec3 Camera::getRightDirection()
 {
-
+	return Vec3();
 }
 
 Vec3 Camera::getLeftDirection()
 {
-
+	return Vec3();
 }

@@ -12,11 +12,11 @@ public:
 
 public:
 	
-	Camera() {}
+	Camera();
 	Camera(const Mat4& projectionMatrix);
 
-	virtual void focusPoint() {}
-	virtual void update() {}
+	void focusPoint();
+	void update();
 	void zoom(float delta);
 	//getter methods
 	inline const Vec3& getPosition() const { return mPosition; }

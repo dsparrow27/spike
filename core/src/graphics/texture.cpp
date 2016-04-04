@@ -8,7 +8,6 @@ Texture::Texture(const std::string& fileName)
 
 Texture::~Texture()
 {
-
 	glDeleteTextures(1, &mTID);
 }
 

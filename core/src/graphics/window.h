@@ -1,9 +1,10 @@
 //Main window for spike 
 #pragma once
-#include <iostream>
+
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
-#include "camera.h"
+#include <iostream>
+#include "../maths/maths.h"
 #define MAX_KEYS 1024
 #define MAX_BUTTONS 32
 
@@ -15,7 +16,6 @@ private:
 	bool mKeys[MAX_KEYS];
 	bool mMouseButtons[MAX_BUTTONS];
 	bool mIsResizeable;
-	Camera mCamera;
 
 public:
 	GLFWwindow *mWindow; // window pointer
@@ -27,15 +27,21 @@ public:
 	bool closed() const; // for closing our window
 	void clear() const;
 	void update();
+	// setters
 	void enableDepth();
-	void setResizeable(bool state);
-	bool isResizable(bool state);
 	void drawWireframe(bool state);
+	void setResizeable(bool state);
 	void setCullingType(const char* cullType) const;
-	void setCamera(const Camera camera);
+	void setTitle(const char *title);
+	void setVisible(bool visible);
+	void setPosition(const Vec2& position);
+	void setSize(const Vec2& size);
+	Vec2 getSize();
 	// getters
-	inline int getWidth() const { return mWidth; };
-	inline int getHeight() const { return mHeight; };
+	int getWidth() const { return mWidth; };
+	int getHeight() const { return mHeight; };
+	Vec2 getPosition();
+	bool isResizable(bool state);
 	//getters for events
 	bool isKeyPressed(unsigned int keycode) const;
 	bool isMousePressed(unsigned int button) const;
@@ -47,5 +53,5 @@ private:
 	friend void key_callback(GLFWwindow* window, int key, int scanCode, int action, int mods);
 	friend void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	friend void cursor_position_callback(GLFWwindow* window, double xPos, double yPos);
-	friend void mouse_scroll_callback(GLFWwindow* window, double xPos, double yPos) { mCamera.zoom(yPos); }
+	//friend void mouse_scroll_callback(GLFWwindow* window, double xPos, double yPos) { mCamera.zoom(yPos); }
 };

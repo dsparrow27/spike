@@ -77,10 +77,6 @@ void Window::drawWireframe(bool state)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 }
-void Window::setCamera(Camera camera)
-{
-	mCamera = camera;
-}
 void Window::setResizeable(bool state)
 {
 	if (state)
@@ -91,12 +87,12 @@ void Window::setResizeable(bool state)
 	{
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	}
-	mIsResizeable = state;
+	this->mIsResizeable = state;
 }
 
 bool Window::isResizable(bool state)
 {
-	return mIsResizeable;
+	return this->mIsResizeable;
 }
 void Window::setCullingType(const char* cullType) const
 {
@@ -109,6 +105,43 @@ void Window::setCullingType(const char* cullType) const
 		glCullFace(GL_FRONT);
 	}
 }
+void Window::setTitle(const char *title)
+{
+	this->mTitle = title;
+	glfwSetWindowTitle(mWindow, title);
+}
+void Window::setVisible(bool visible)
+{
+	if (visible)
+	{
+		glfwShowWindow(mWindow);
+	}
+	else
+	{
+		glfwHideWindow(mWindow);
+	}
+}
+void Window::setPosition(const Vec2& position)
+{
+	glfwSetWindowPos(mWindow, position.x, position.y);
+}
+Vec2 Window::getPosition()
+{
+	int x, y;
+	glfwGetWindowPos(mWindow, &x, &y);
+	return Vec2(x, y);
+}
+void Window::setSize(const Vec2& size)
+{
+	this->mWidth = size.x;
+	this->mHeight = size.y;
+	glfwSetWindowSize(mWindow, this->mWidth, this->mHeight);
+}
+Vec2 Window::getSize()
+{
+	return Vec2(mWidth, mHeight);
+}
+
 bool Window::isKeyPressed(unsigned int keycode) const
 {
 	/*Returns a bool, if the keycode is less than or equal to the MAX_KEYS count return false 
@@ -135,8 +168,8 @@ bool Window::isMousePressed(unsigned int button) const
 }
 void Window::getMousePosition(double&x, double& y) const
 {
-	x = mx;
-	y = my;
+	x = this->mx;
+	y = this->my;
 }
 
 void Window::clear() const

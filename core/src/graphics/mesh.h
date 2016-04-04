@@ -12,7 +12,6 @@ struct Vertex
 	Vec3 texCoords;
 };
 
-
 class Mesh {
 public:
 	/*  Mesh Data  */
