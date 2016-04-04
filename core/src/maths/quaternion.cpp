@@ -75,9 +75,9 @@ Vec3 Quaternion::toEuler()
 // returns a quaternion from 
 Quaternion Quaternion::fromEuler(const Vec3& angles)
 {
-	Quaternion pitch(Vec4(1.0, 0.0, 0.0, angles.x));
-	Quaternion yaw(Vec4(0.0, 1.0, 0.0, angles.y));
-	Quaternion roll(Vec4(0.0, 0.0, 1.0, angles.z));
+	Quaternion pitch(1.0, 0.0, 0.0, angles.x);
+	Quaternion yaw(0.0, 1.0, 0.0, angles.y);
+	Quaternion roll(0.0, 0.0, 1.0, angles.z);
 	return pitch * yaw * roll;
 }
 

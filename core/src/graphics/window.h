@@ -16,12 +16,13 @@ private:
 	bool mKeys[MAX_KEYS];
 	bool mMouseButtons[MAX_BUTTONS];
 	bool mIsResizeable;
-
-public:
-	GLFWwindow *mWindow; // window pointer
 	int mWidth, mHeight; // window height/ width
 	const char *mTitle; //window title
+
+public:
+	GLFWwindow *mWindow; // window 
 	double mx, my; // xy positions of the window
+public:
 	Window(const char *name, int width, int height);
 	~Window();
 	bool closed() const; // for closing our window
@@ -37,6 +38,7 @@ public:
 	void setPosition(const Vec2& position);
 	void setSize(const Vec2& size);
 	Vec2 getSize();
+	void makeContextcurrent();
 	// getters
 	int getWidth() const { return mWidth; };
 	int getHeight() const { return mHeight; };

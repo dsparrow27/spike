@@ -1,7 +1,6 @@
 #include "window.h"
 
 
-void windowResize(GLFWwindow * window, int width, int height);
 Window::Window(const char *name, int width, int height)
 	:mTitle(name), mWidth(width), mHeight(height)
 {
@@ -19,8 +18,7 @@ Window::Window(const char *name, int width, int height)
 	{
 		mMouseButtons[i] = false;
 	}
-}
-		
+}		
 Window::~Window()
 {
 	//terminate the window
@@ -47,7 +45,7 @@ bool Window::init()
 		return false;
 	}
 	glewExperimental = GL_TRUE;
-	glfwMakeContextCurrent(mWindow);
+	this->makeContextcurrent();
 	glfwSetWindowUserPointer(mWindow, this);
 	glfwSetWindowSizeCallback(mWindow, windowResize);
 	glfwSetKeyCallback(mWindow, key_callback);
@@ -62,6 +60,10 @@ bool Window::init()
 	return true;
 }
 // settings
+void Window::makeContextcurrent()
+{
+	glfwMakeContextCurrent(mWindow);
+}
 void Window::enableDepth()
 {
 	glEnable(GL_DEPTH_TEST);
@@ -168,10 +170,10 @@ bool Window::isMousePressed(unsigned int button) const
 }
 void Window::getMousePosition(double&x, double& y) const
 {
+	
 	x = this->mx;
 	y = this->my;
 }
-
 void Window::clear() const
 {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -191,9 +193,8 @@ void windowResize(GLFWwindow *window, int width, int height)
 	//resize the viewport to the width and height, gets called by callback
 	glViewport(0, 0, width, height);
 }
-
 //////////////////
-//   callbacks
+//   callbacks  , these are temp, need to make an input manager
 //////////////////
 void key_callback(GLFWwindow* window, int key, int scanCode, int action, int mods)
 {
@@ -210,13 +211,11 @@ void key_callback(GLFWwindow* window, int key, int scanCode, int action, int mod
 			win->mKeys[key] = false;
 	}
 }
-
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
 	win->mMouseButtons[button] = action != GLFW_RELEASE;
 }
-
 void cursor_position_callback(GLFWwindow* window, double xPos, double yPos)
 {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);

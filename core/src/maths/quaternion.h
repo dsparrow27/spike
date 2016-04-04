@@ -9,13 +9,16 @@ class Quaternion
 {
 public:
 	float x, y, z, w;
+	//constructors
 	Quaternion();
 	Quaternion(const Quaternion& quaternion);
 	Quaternion(float x, float y, float z, float w);
 	Quaternion(Vec4 xyzw);
+	// sets the quaternion to 0.0,0.0,0.0,1.0
 	Quaternion identity();
 	// The magnitude or length of a quaternion
 	float length();
+	// dot product 
 	float dot(const Quaternion& other);
 	// normalizes the quaternion
 	void normalize();
@@ -29,6 +32,7 @@ public:
 	float pitch();
 	float yaw();
 
+	// operator overrides
 	bool const operator==(const Quaternion& other);
 	bool const operator!=(const Quaternion& other);
 

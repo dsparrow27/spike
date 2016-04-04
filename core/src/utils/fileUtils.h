@@ -34,6 +34,8 @@ public:
 		const std::string fcontents = content.c_str();
 		return fcontents;
 	}
+
+	// currently broken as shit
 	static BYTE* loadImage(const char* path, int* width, int* height)
 	{
 		//image format
