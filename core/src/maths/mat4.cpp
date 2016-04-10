@@ -1,296 +1,388 @@
 #include "mat4.h"
-Mat4::Mat4()
-{
-	for (int i = 0; i < 4 * 4; i++)
-		elements[i] = 0.0f;
-}
+//constructors
 Mat4::Mat4(float diagonal)
 {
-	for (int i = 0; i < 4 * 4; i++)
+	memset(this, 0, sizeof(Mat4));
+
+	elements[0][0] = elements[1][1] = elements[2][2] = elements[3][3] = diagonal;
+}
+Mat4::Mat4(float m00, float m01, float m02, float m03,
+		   float m10, float m11, float m12, float m13,
+	       float m20, float m21, float m22, float m23,
+		   float m30, float m31, float m32, float m33)
+{
+	elements[0][0] = m00; elements[0][1] = m01; elements[0][2] = m02; elements[0][3] = m03;
+	elements[1][0] = m10; elements[1][1] = m11; elements[1][2] = m12; elements[1][3] = m13;
+	elements[2][0] = m20; elements[2][1] = m21; elements[2][2] = m22; elements[2][3] = m23;
+	elements[3][0] = m30; elements[3][1] = m31; elements[3][2] = m32; elements[3][3] = m33;
+}
+Mat4::Mat4(const Mat4& m)
+{
+	memcpy(&elements[0][0], &m.elements[0][0], sizeof(float) * 16);
+}
+Mat4::Mat4(const Vec3& forward, const Vec3& vecUp, const Vec3& vecRight,
+	       const Vec3& vecPosition = Vec3(0, 0, 0))
+{
+	setForwardVector(forward);
+	setUpVector(vecUp);
+	setRightVector(vecRight);
+	setTranslation(vecPosition);
+}
+Mat4::Mat4(const Vec4& forward, const Vec4& vecUp, const Vec4& vecRight,
+		   const Vec4& vecPosition = Vec4(0, 0, 0, 1))
+{
+	setForwardVector(forward);
+	setUpVector(vecUp);
+	setRightVector(vecRight);
+	setTranslation(vecPosition);
+}
+//methods
+Mat4& Mat4::asIdentity()
+{
+	memset(this, 0, sizeof(Mat4));
+
+	elements[0][0] = elements[1][1] = elements[2][2] = elements[3][3] = 1.0f;
+}
+bool Mat4::isIdentity() const
+{
+	if (!(elements[0][0] == 1 && elements[1][1] == 1 && elements[2][2] == 1 && elements[3][3] == 1))
 	{
-		elements[i] = 0.0f;
+		return false;
 	}
-	elements[0 + 0 * 4] = diagonal;
-	elements[1 + 1 * 4] = diagonal;
-	elements[2 + 2 * 4] = diagonal;
-	elements[3 + 3 * 4] = diagonal;
-}
-Vec4 Mat4::getColumn(int index)
-{
-	index *= 4;
-	return Vec4(elements[index], elements[index + 1], elements[index + 2], elements[index + 3]);
-}
-Mat4 Mat4::identity()
-{
-	return Mat4(1.0f);
-}
-Mat4 Mat4::operator=(const Mat4& other)
-{
-	for (int i = 0; i < 4*4; i++)
+	if (!(elements[0][1] == 0) && elements[0][2] == 0 && elements[0][3] == 0)
 	{
-		this->elements[i] = other.elements[i];
+		return false;
 	}
+	if (!(elements[1][0] == 0) && elements[1][2] == 0 && elements[1][3] == 0)
+	{
+		return false;
+	}
+	if (!(elements[2][0] == 0) && elements[2][1] == 0 && elements[2][3] == 0)
+	{
+		return false;
+	}
+	if (!(elements[3][0] == 0) && elements[3][1] == 0 && elements[3][2] == 0)
+	{
+		return false;
+	}
+}
+Mat4 Mat4::inverse()
+{
+	Mat4 newMat;
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; i < 3; i++)
+		{
+			newMat.elements[i][j] = elements[j][i];
+		}
+	newMat.setTranslation(-(newMat*getTranslation()));
+	return newMat;
+}
+
+Mat4 Mat4::projectOrthographic(float left, float right, float top, float bottom, float near, float far)
+{
+	Mat4 m;
+	m.asIdentity();
+
+	float xd = right - left;
+	float yd = top - bottom;
+	float zd = far - near;
+
+	m.elements[0][0] = 2.0f / xd;
+	m.elements[1][1] = 2.0f / yd;
+	m.elements[2][2] = -2.0f / zd;
+
+	m.elements[3][0] = -(right + left) / xd;
+	m.elements[3][0] = -(top + bottom) / yd;
+	m.elements[3][0] = -(far + near) / zd;
+	return m;
+}
+Mat4 Mat4::projectPerspective(float fov, float aspectRatio, float near, float far)
+{
+	float tanThetaOver = tan(toRadians(fov));
+	Mat4 m;
+	m.asIdentity();
+	//xy scale
+	m.elements[0][0] = 1 / tanThetaOver;
+	m.elements[1][1] = aspectRatio / tanThetaOver;
+
+	//z makes z-1 for the rear plane and +1 for the far plane
+	m.elements[2][2] = (near + far) / (near - far);
+	m.elements[3][2] = 2 * (near * far) / (near - far);
+	// w=-1 so that [xyz-z], homogenous vector that becomes [-x/z -y/z -1] after division by w
+	m.elements[2][3] = -1;
+	//zero out
+	m.elements[3][3] = 0;
+	return m;
+}
+Mat4 Mat4::projectFrustum(float fov, float aspectRatio, float near, float far)
+{
+	float right = near * tan(toRadians(fov));
+	float left = -right;
+
+	float bottom = left / aspectRatio;
+	float top = right / aspectRatio;
+	return projectFrustum(left, right, bottom, top, near, far);
+}
+Mat4 Mat4::projectFrustum(float left, float right, float bottom, float top, float near, float far)
+{
+	Mat4 m;
+	m.asIdentity();
+
+	float xd = right - left;
+	float yd = top - bottom;
+	float zd = far - near;
+
+	m.elements[0][0] = (2 * near) / xd;
+	m.elements[1][1] = (2 * near) / yd;
+
+	m.elements[2][0] = (right + left) / xd;
+	m.elements[2][1] = (top + bottom) / yd;
+	m.elements[2][2] = (far + near) / zd;
+	m.elements[2][3] = -1;
+	m.elements[3][2] = -(2 * far * near) / zd;
+	m.elements[3][3] = 0;
+	return m;
+}
+Mat4 Mat4::constructCameraView(const Vec3& position, const Vec3& direction, const Vec3& upVector)
+{
+	Vec3 vecRight = direction.cross(upVector).normalized();
+	Vec3 vecCameraUp = vecRight.cross(direction);
+
+	return Mat4(vecRight, vecCameraUp, -direction, position).inverse();
+}
+Mat4 Mat4::addTranslation(const Vec3 v)
+{
+	Mat4 m;
+	m.setTranslation(v);
+	*this *= m;
 	return *this;
 }
+Mat4 Mat4::addScale(const Vec3 v)
+{
+	Mat4 m;
+	m.setScale(v);
+	*this *= m;
+	return *this;
+}
+Mat4 Mat4::addReflection(const Vec3 v)
+{
+	Mat4 m;
+	m.setReflection(v);
+	*this = m; 
+	return *this;
+}
+Vec3 Mat4::transformDirection(const Vec3 v) const
+{
+	Vec3 result;
+	result.x = elements[0][0] * v.x + elements[1][0] * v.y + elements[2][0] * v.z;
+	result.x = elements[0][1] * v.x + elements[1][1] * v.y + elements[2][1] * v.z;
+	result.x = elements[0][2] * v.x + elements[1][2] * v.y + elements[2][2] * v.z;
+	return result;
+}
+Mat4 Mat4::transposed() const
+{
+	Mat4 result;
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			result.elements[i][j] = elements[j][i];
+		}
+	}
+	return result;
+}
+//getter
+Vec4 Mat4::getColumn(int index) const
+{
+	return Vec4(elements[index][0], elements[index][1], elements[index][2], elements[index][3]);
+}
+Vec4 Mat4::getRow(int index) const
+{
+	return Vec4(elements[0][index], elements[1][index], elements[2][index], elements[3][index]);
+}
+Vec3 Mat4::getTranslation() const
+{
+	return Vec3(elements[3][0], elements[3][1], elements[3][2]);
+}
+Vec3 Mat4::getScale() const
+{
+	return Vec3(elements[0][0], elements[1][1], elements[2][2]);
+}
+//setters
+void Mat4::setColumn(int i, const Vec3& column)
+{
+	elements[i][0] = column.x;
+	elements[i][1] = column.y;
+	elements[i][2] = column.z;
+}
+void Mat4::setColumn(int i, const Vec4& column)
+{
+	elements[i][0] = column.x;
+	elements[i][1] = column.y;
+	elements[i][2] = column.z;
+	elements[i][3] = column.w;
+}
+void Mat4::setTranslation(const Vec3& translation)
+{
+	this->setColumn(3, translation);
+}
+void Mat4::setTranslation(const Vec4& translation)
+{
+	this->setColumn(3, translation);
+}
+void Mat4::setRotation(float angle, const Vec3& axis)
+{
+
+}
+void Mat4::setScale(const Vec3& scale)
+{
+	elements[0][0] = scale.x;
+	elements[1][1] = scale.y;
+	elements[2][2] = scale.y;
+}
+void Mat4::setForwardVector(const Vec3& forward)
+{
+	this->setColumn(0, forward);
+}
+void Mat4::setForwardVector(const Vec4& forward)
+{
+	this->setColumn(0, forward);
+}
+void Mat4::setUpVector(const Vec4& upVector)
+{
+	this->setColumn(1, upVector);
+}
+void Mat4::setUpVector(const Vec3& upVector)
+{
+	this->setColumn(1, upVector);
+}
+void Mat4::setRightVector(const Vec4& right)
+{
+	this->setColumn(2, right);
+}
+void Mat4::setRightVector(const Vec3& right)
+{
+	this->setColumn(2, right);
+}
+void Mat4::setReflection(const Vec3& planeNormal)
+{
+
+}
+
+//operators
 bool Mat4::operator==(const Mat4& other)
 {
+	float ep = 0.000001f;
 	//column
 	for (int col = 0; col < 4; col++)
 	{
 		//row
 		for (int row = 0; row < 4; row++)
 		{
-			if (elements[col + row * 4] != other.elements[col + row * 4])
+			if (fabs(elements[col][row] - other.elements[col][row]) > ep)
 			{
 				return false;
 			}
 		}
 	}
 	return true;
-}	
-
+}
 bool Mat4::operator!=(const Mat4& other)
 {
 	return this->elements != other.elements;
-}
 
+}
+Mat4& Mat4::operator=(const Mat4& other)
+{
+	memcpy(&elements[0][0], &other.elements[0][0], sizeof(float) * 16);
+	return *this;
+}
 Mat4& Mat4::operator*=(const Mat4& other)
 {
-	return multiply(other);
+	*this = *this * other;
+	return *this;
 }
-
-Mat4& Mat4::operator*(const Mat4& other)
+Mat4& Mat4::operator+=(const Vec3& other)
 {
-	return this->multiply(other);
+	elements[3][0] += other.x;
+	elements[3][1] += other.x;
+	elements[3][2] += other.x;
+	return *this;
 }
-Vec3 Mat4::operator*(const Vec3& other)
+Mat4 Mat4::operator*(const Mat4& other) const
 {
-	return this->multiply(other);
-}
-
-Mat4& Mat4::multiply(const Mat4& other)
-{
-	float data[16];
-	//column
-	for (int y = 0; y < 4; y++)
+	Mat4 result;
+	for (int c = 0; c < 4; c++)
 	{
-		//row
-		for (int x = 0; x < 4; x++)
+		for (int r = 0; r < 4; r++)
 		{
-			float sum = 0.0f;
-			for (int e = 0; e < 4; e++)
-			{
-				sum += elements[x + e * 4] * other.elements[e + y * 4];
-			}
-			data[x + y * 4] = sum;
+			result.elements[c][r] = elements[0][r] * other.elements[c][0] + elements[1][r] * other.elements[c][1] + elements[2][r] * other.elements[c][2] + elements[3][r] * other.elements[c][3];
 		}
 	}
-	memcpy(elements, data, 4 * 4 * sizeof(float));
-	return *this;
-}
-Vec3 Mat4::multiply(const Vec3& other)
-{
-	return Vec3(
-		columns[0].x * other.x + columns[1].x * other.y + columns[2].x * other.z + columns[3].x,
-		columns[0].y * other.x + columns[1].y * other.y + columns[2].y * other.z + columns[3].y, 
-		columns[0].z * other.x + columns[1].z * other.y + columns[2].z * other.z + columns[3].z);
-}
-Mat4 Mat4::orthographic(float left, float right, float bottom, float top, float near, float far)
-{
-	Mat4 result(1.0f);
-	//diagonal
-	result.elements[0 + 0 * 4] = 2.0f / (right - left);
-	result.elements[1 + 1 * 4] = 2.0f / (top - bottom);
-	result.elements[2 + 2 * 4] = -2.0f / (far - near);
-
-	result.elements[0 + 3 * 4] = -((right + left) / (right - left));
-	result.elements[1 + 3 * 4] = -((top + bottom) / (top - bottom));
-	result.elements[2 + 3 * 4] = -((far + near) / (far - near));
-
-	return result;
-
-}
-
-Mat4 Mat4::perspective(float fov, float aspectRatio, float near, float far)
-{
-	Mat4 result(1.0f);
-	float q = 1.0f / tan(toRadians(0.5f * fov));
-	float a = q / aspectRatio;
-	result.elements[0 + 0 * 4] = a;
-	result.elements[1 + 1 * 4] = q;
-	result.elements[2 + 2 * 4] = ((far + near) / (near - far));
-	result.elements[2 + 3 * 4] = -((2.0f * near * far) / (near - far));
-	result.elements[3 + 2 * 4] = 1.0f;
-	result.elements[3 + 3 * 4] = 0.0f;
-
 	return result;
 }
-
-Mat4 Mat4::translate(const Vec3& translation)
+Mat4 Mat4::operator*(float f) const
 {
-	Mat4 result(1.0f);
-	result.elements[0 + 3 * 4] = translation.x;
-	result.elements[1 + 3 * 4] = translation.y;
-	result.elements[2 + 3 * 4] = translation.z;
-	return result;
-}
+	Mat4 result;
 
-Mat4 Mat4::rotate(float angle, const Vec3& axis)
-{
-	Mat4 result(1.0f);
-	float r = toRadians(angle);
-	float c = cos(r);
-	float s = sin(r);
-	float omc = 1.0f - c;
-
-	//row 1 
-	result.elements[0 + 0 * 4] = axis.x * omc + c;
-	result.elements[0 + 1 * 4] = (axis.y * axis.x) * omc + (axis.z * s);
-	result.elements[0 + 2 * 4] = (axis.x * axis.z) * omc - (axis.y * s);
-	//row 2
-	result.elements[1 + 0 * 4] = (axis.x * axis.y) * omc - (axis.z * s);
-	result.elements[1 + 1 * 4] = axis.y * omc + c;
-	result.elements[1 + 2 * 4] = (axis.y * axis.z) * omc + (axis.x * s);
-	//row 3
-	result.elements[2 + 0 * 4] = (axis.x * axis.z) * omc + (axis.y * s);
-	result.elements[2 + 1 * 4] = (axis.y * axis.z) * omc - (axis.x * s);
-	result.elements[2 + 2 * 4] = axis.z * omc + c;
-
-	return result;
-
-}
-
-Mat4 Mat4::scale(const Vec3& scale)
-{
-	Mat4 result(1.0f);
-	result.elements[0 + 0 * 4] = scale.x;
-	result.elements[1 + 1 * 4] = scale.y;
-	result.elements[2 + 2 * 4] = scale.z;
-	return result;
-}
-
-Mat4& Mat4::inverse()
-{
-	//
-	double temp[16];
-	temp[0] = elements[5] * elements[10] * elements[15] -
-			elements[5] * elements[11] * elements[14] -
-			elements[9] * elements[6] * elements[15] +
-			elements[9] * elements[7] * elements[14] +
-			elements[13] * elements[6] * elements[11] -
-			elements[13] * elements[7] * elements[10];
-
-	temp[4] = -elements[4] * elements[10] * elements[15] +
-			elements[4] * elements[11] * elements[14] +
-			elements[8] * elements[6] * elements[15] -
-			elements[8] * elements[7] * elements[14] -
-			elements[12] * elements[6] * elements[11] +
-			elements[12] * elements[7] * elements[10];
-
-	temp[8] = elements[4] * elements[9] * elements[15] -
-			elements[4] * elements[11] * elements[13] -
-			elements[8] * elements[5] * elements[15] +
-			elements[8] * elements[7] * elements[13] +
-			elements[12] * elements[5] * elements[11] -
-			elements[12] * elements[7] * elements[9];
-
-	temp[12] = -elements[4] * elements[9] * elements[14] +
-			elements[4] * elements[10] * elements[13] +
-			elements[8] * elements[5] * elements[14] -
-			elements[8] * elements[6] * elements[13] -
-			elements[12] * elements[5] * elements[10] +
-			elements[12] * elements[6] * elements[9];
-
-	temp[1] = -elements[1] * elements[10] * elements[15] +
-			elements[1] * elements[11] * elements[14] +
-			elements[9] * elements[2] * elements[15] -
-			elements[9] * elements[3] * elements[14] -
-			elements[13] * elements[2] * elements[11] +
-			elements[13] * elements[3] * elements[10];
-
-	temp[5] = elements[0] * elements[10] * elements[15] -
-			elements[0] * elements[11] * elements[14] -
-			elements[8] * elements[2] * elements[15] +
-			elements[8] * elements[3] * elements[14] +
-			elements[12] * elements[2] * elements[11] -
-			elements[12] * elements[3] * elements[10];
-
-	temp[9] = -elements[0] * elements[9] * elements[15] +
-			elements[0] * elements[11] * elements[13] +
-			elements[8] * elements[1] * elements[15] -
-			elements[8] * elements[3] * elements[13] -
-			elements[12] * elements[1] * elements[11] +
-			elements[12] * elements[3] * elements[9];
-
-	temp[13] = elements[0] * elements[9] * elements[14] -
-			elements[0] * elements[10] * elements[13] -
-			elements[8] * elements[1] * elements[14] +
-			elements[8] * elements[2] * elements[13] +
-			elements[12] * elements[1] * elements[10] -
-			elements[12] * elements[2] * elements[9];
-
-	temp[2] = elements[1] * elements[6] * elements[15] -
-			elements[1] * elements[7] * elements[14] -
-			elements[5] * elements[2] * elements[15] +
-			elements[5] * elements[3] * elements[14] +
-			elements[13] * elements[2] * elements[7] -
-			elements[13] * elements[3] * elements[6];
-
-	temp[6] = -elements[0] * elements[6] * elements[15] +
-			elements[0] * elements[7] * elements[14] +
-			elements[4] * elements[2] * elements[15] -
-			elements[4] * elements[3] * elements[14] -
-			elements[12] * elements[2] * elements[7] +
-			elements[12] * elements[3] * elements[6];
-
-	temp[10] = elements[0] * elements[5] * elements[15] -
-			elements[0] * elements[7] * elements[13] -
-			elements[4] * elements[1] * elements[15] +
-			elements[4] * elements[3] * elements[13] +
-			elements[12] * elements[1] * elements[7] -
-			elements[12] * elements[3] * elements[5];
-
-	temp[14] = -elements[0] * elements[5] * elements[14] +
-			elements[0] * elements[6] * elements[13] +
-			elements[4] * elements[1] * elements[14] -
-			elements[4] * elements[2] * elements[13] -
-			elements[12] * elements[1] * elements[6] +
-			elements[12] * elements[2] * elements[5];
-
-	temp[3] = -elements[1] * elements[6] * elements[11] +
-			elements[1] * elements[7] * elements[10] +
-			elements[5] * elements[2] * elements[11] -
-			elements[5] * elements[3] * elements[10] -
-			elements[9] * elements[2] * elements[7] +
-			elements[9] * elements[3] * elements[6];
-
-	temp[7] = elements[0] * elements[6] * elements[11] -
-			elements[0] * elements[7] * elements[10] -
-			elements[4] * elements[2] * elements[11] +
-			elements[4] * elements[3] * elements[10] +
-			elements[8] * elements[2] * elements[7] -
-			elements[8] * elements[3] * elements[6];
-
-	temp[11] = -elements[0] * elements[5] * elements[11] +
-			elements[0] * elements[7] * elements[9] +
-			elements[4] * elements[1] * elements[11] -
-			elements[4] * elements[3] * elements[9] -
-			elements[8] * elements[1] * elements[7] +
-			elements[8] * elements[3] * elements[5];
-
-	temp[15] = elements[0] * elements[5] * elements[10] -
-			elements[0] * elements[6] * elements[9] -
-			elements[4] * elements[1] * elements[10] +
-			elements[4] * elements[2] * elements[9] +
-			elements[8] * elements[1] * elements[6] -
-			elements[8] * elements[2] * elements[5];
-
-	double determin = elements[0] * temp[0] + elements[1] * temp[4] + elements[2] * temp[8] + elements[3] * temp[12];
-	determin = 1.0 / determin;
-
-	for (int i = 0; i < 16; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		elements[i] = temp[i] * determin;
+		for (int j = 0; j < 4; j++)
+		{
+			result.elements[i][j] = elements[i][j] * f;
+		}
 	}
-	return *this;
+	return result;
+}
+Vec3 Mat4::operator*(const Vec3& other) const
+{
+	Vec3 result;
+	result.x = elements[0][0] * other.x + elements[1][0] * other.y + elements[2][0] * other.z + elements[3][0];
+	result.y = elements[0][1] * other.x + elements[1][1] * other.y + elements[2][1] * other.z + elements[3][1];
+	result.z = elements[0][2] * other.x + elements[1][2] * other.y + elements[2][2] * other.z + elements[3][2];
+	return result;
+}
+Vec4 Mat4::operator*(const Vec4& other) const
+{
+	Vec4 result;
+	result.x = elements[0][0] * other.x + elements[1][0] * other.y + elements[2][0] * other.z + elements[3][0] * other.w;
+	result.y = elements[0][1] * other.x + elements[1][1] * other.y + elements[2][1] * other.z + elements[3][1] * other.w;
+	result.z = elements[0][2] * other.x + elements[1][2] * other.y + elements[2][2] * other.z + elements[3][2] * other.w;
+	result.w = elements[0][3] * other.x + elements[1][3] * other.y + elements[2][3] * other.z + elements[3][3] * other.w;
+	return result;
+}
+Mat4 Mat4::operator+(const Mat4& other) const
+{
+	Mat4 result;
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			result.elements[i][j] = elements[i][j] + other.elements[i][j];
+		}
+	}
+	return result;
+}
+Mat4 Mat4::operator-(const Mat4& other) const
+{
+	Mat4 result;
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			result.elements[i][j] = elements[i][j] - other.elements[i][j];
+		}
+	}
+	return result;
+}
+Mat4 Mat4::operator-(const Vec3& other) const
+{
+	Mat4 result = *this;
+	result.elements[3][0] -= other.x;
+	result.elements[3][1] -= other.y;
+	result.elements[3][2] -= other.z;
+	return result;
 }

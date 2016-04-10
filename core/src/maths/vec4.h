@@ -12,7 +12,7 @@ struct Vec4
 	Vec4() = default;
 	// second constructor that accepts two floats
 	Vec4(const float& x, const float& y, const float& z, const float& w);
-
+	float length();
 	Vec4& add(const Vec4& other);
 	Vec4& subtract(const Vec4& other);
 	Vec4& multiply(const Vec4& other);

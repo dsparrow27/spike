@@ -6,8 +6,8 @@
 
 // Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
+Vec3 lightPos(3.0,5.0,0.0);
 
-Vec3 lightPos(4.0, 10, 0.0);
 int main()
 {
 	Window window("spike", WIDTH, HEIGHT);

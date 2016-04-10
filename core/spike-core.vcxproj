@@ -162,6 +162,7 @@
     <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\graphics\window.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\mat4.cpp" />
     <ClCompile Include="src\maths\mat4.cpp" />
     <ClCompile Include="src\maths\quaternion.cpp" />
     <ClCompile Include="src\maths\vec2.cpp" />

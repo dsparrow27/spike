@@ -13,17 +13,39 @@ Vec3::Vec3(const float& x, const float& y, const float& z)
 	this->y = y;
 	this->z = z;
 }
-float Vec3::length()
+Vec3::Vec3(const Vec3& vector)
+{
+	this->x = vector.x;
+	this->y = vector.y;
+	this->z = vector.z;
+}
+float Vec3::length() const
 {
 	return sqrt(this->x * this->x + this->y* this->y + this->z * this->z);
 }
-Vec3& Vec3::normalize()
+float Vec3::lengthSqrt() const
 {
-	float vlength = length();
-	this->x /= vlength;
-	this->y /= vlength;
-	this->z /= vlength;
-	return *this;
+	return (this->x * this->x + this->y* this->y + this->z * this->z);
+}
+Vec3 Vec3::normalized() const
+{
+	return *this / length();
+}
+void Vec3::normalize()
+{
+	*this = *this / length();
+}
+Vec3 Vec3::cross(const Vec3& other) const
+{
+	Vec3 c;
+	c.x = y*other.z - z*other.y;
+	c.y = z*other.x - x*other.z;
+	c.z = x*other.y - y*other.x;
+	return c;
+}
+float Vec3::dot(const Vec3& other) const
+{
+	return x * other.x + y * other.y + z * other.z;
 }
 bool Vec3::operator==(const Vec3& other)
 {
@@ -48,53 +70,36 @@ Vec3& Vec3::operator=(const Vec3& other)
 	return *this;
 }
 
-Vec3& Vec3::operator+(const Vec3& other)
+Vec3 Vec3::operator+(const Vec3& other) const
 {
-	return add(other);
+	return Vec3(x + other.x, y + other.y, z + other.z);
 }
 
-Vec3& Vec3::operator-(const Vec3& other)
+Vec3 Vec3::operator-(const Vec3& other) const
 {
-	return subtract(other);
+	return Vec3(x - other.x, y - other.y, z - other.z);
 }
-
-Vec3& Vec3::operator*(const Vec3& other)
+Vec3 Vec3::operator-() const
 {
-	return multiply(other);
+	return Vec3(-x, -y, -z);
 }
-Vec3& Vec3::operator*(float scalar)
+Vec3 Vec3::operator*(const Vec3& other) const
 {
-	this->x = scalar * this->x;
-	this->y = scalar * this->y;
-	this->z = scalar * this->z;
-	return *this;
+	return Vec3(x * other.x, y * other.y, z * other.z);
 }
-Vec3& Vec3::operator/(const Vec3& other)
+Vec3 Vec3::operator*(float scalar) const
 {
-	return divide(other);
+	return Vec3(x*scalar, y*scalar, z*scalar);
 }
-
+Vec3 Vec3::operator/(const Vec3& other) const
+{
+	return Vec3(x/other.z, y/other.y, z/other.z);
+}
+Vec3 Vec3::operator/(float other) const
+{
+	return Vec3(x / other, y / other, z / other);
+}
 Vec3& Vec3::operator+=(const Vec3& other)
-{
-	return add(other);
-}
-
-Vec3& Vec3::operator-=(const Vec3& other)
-{
-	return subtract(other);
-}
-
-Vec3& Vec3::operator*=(const Vec3& other)
-{
-	return multiply(other);
-}
-
-Vec3& Vec3::operator/=(const Vec3& other)
-{
-	return divide(other);
-}
-
-Vec3& Vec3::add(const Vec3& other)
 {
 	this->x += other.x;
 	this->y += other.y;
@@ -102,7 +107,7 @@ Vec3& Vec3::add(const Vec3& other)
 	return *this;
 }
 
-Vec3& Vec3::subtract(const Vec3& other)
+Vec3& Vec3::operator-=(const Vec3& other)
 {
 	this->x -= other.x;
 	this->y -= other.y;
@@ -110,7 +115,7 @@ Vec3& Vec3::subtract(const Vec3& other)
 	return *this;
 }
 
-Vec3& Vec3::multiply(const Vec3& other)
+Vec3& Vec3::operator*=(const Vec3& other)
 {
 	this->x *= other.x;
 	this->y *= other.y;
@@ -118,7 +123,7 @@ Vec3& Vec3::multiply(const Vec3& other)
 	return *this;
 }
 
-Vec3& Vec3::divide(const Vec3& other)
+Vec3& Vec3::operator/=(const Vec3& other)
 {
 	this->x /= other.x;
 	this->y /= other.y;

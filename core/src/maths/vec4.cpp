@@ -7,6 +7,10 @@ Vec4::Vec4(const float& x, const float& y, const float& z, const float& w)
 	this->z = z;
 	this->w = w;
 }
+float Vec4::length()
+{
+	return sqrt(x*x + y*y + z*z + w*w);
+}
 
 bool Vec4::operator==(const Vec4& other)
 {
