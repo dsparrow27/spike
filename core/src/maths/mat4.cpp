@@ -20,16 +20,14 @@ Mat4::Mat4(const Mat4& m)
 {
 	memcpy(&elements[0][0], &m.elements[0][0], sizeof(float) * 16);
 }
-Mat4::Mat4(const Vec3& forward, const Vec3& vecUp, const Vec3& vecRight,
-	       const Vec3& vecPosition = Vec3(0, 0, 0))
+Mat4::Mat4(const Vec3& forward, const Vec3& vecUp, const Vec3& vecRight, const Vec3& vecPosition)
 {
 	setForwardVector(forward);
 	setUpVector(vecUp);
 	setRightVector(vecRight);
 	setTranslation(vecPosition);
 }
-Mat4::Mat4(const Vec4& forward, const Vec4& vecUp, const Vec4& vecRight,
-		   const Vec4& vecPosition = Vec4(0, 0, 0, 1))
+Mat4::Mat4(const Vec4& forward, const Vec4& vecUp, const Vec4& vecRight, const Vec4& vecPosition)
 {
 	setForwardVector(forward);
 	setUpVector(vecUp);
@@ -42,6 +40,7 @@ Mat4& Mat4::asIdentity()
 	memset(this, 0, sizeof(Mat4));
 
 	elements[0][0] = elements[1][1] = elements[2][2] = elements[3][3] = 1.0f;
+	return *this;
 }
 bool Mat4::isIdentity() const
 {
@@ -65,6 +64,7 @@ bool Mat4::isIdentity() const
 	{
 		return false;
 	}
+	return true;
 }
 Mat4 Mat4::inverse()
 {
@@ -107,11 +107,12 @@ Mat4 Mat4::projectPerspective(float fov, float aspectRatio, float near, float fa
 
 	//z makes z-1 for the rear plane and +1 for the far plane
 	m.elements[2][2] = (near + far) / (near - far);
-	m.elements[3][2] = 2 * (near * far) / (near - far);
+	m.elements[3][2] = -((2 * near * far) / (near - far));
 	// w=-1 so that [xyz-z], homogenous vector that becomes [-x/z -y/z -1] after division by w
-	m.elements[2][3] = -1;
+	m.elements[2][3] = 1;
 	//zero out
 	m.elements[3][3] = 0;
+
 	return m;
 }
 Mat4 Mat4::projectFrustum(float fov, float aspectRatio, float near, float far)
@@ -209,6 +210,18 @@ Vec3 Mat4::getScale() const
 {
 	return Vec3(elements[0][0], elements[1][1], elements[2][2]);
 }
+void Mat4::getAsArray()
+{
+	int index = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			mArray[index] = elements[i][j];
+			index++;
+		}
+	}
+}
 //setters
 void Mat4::setColumn(int i, const Vec3& column)
 {
@@ -233,7 +246,25 @@ void Mat4::setTranslation(const Vec4& translation)
 }
 void Mat4::setRotation(float angle, const Vec3& axis)
 {
+	float x = axis.x;
+	float y = axis.y;
+	float z = axis.z;
 
+	float c = cos(toRadians(angle));
+	float s = sin(toRadians(angle));
+	float t = 1 - c;
+
+	elements[0][0] = x*x*t + c;
+	elements[1][0] = x*y*t - z*s;
+	elements[2][0] = x*z*t + y*s;
+
+	elements[0][1] = y*x*t + z*s;
+	elements[1][1] = y*y*t + c;
+	elements[2][1] = y*z*t - x*s;
+
+	elements[0][2] = z*x*t - y*s;
+	elements[1][2] = z*y*t + x*s;
+	elements[2][2] = z*z*t + c;
 }
 void Mat4::setScale(const Vec3& scale)
 {
@@ -267,9 +298,13 @@ void Mat4::setRightVector(const Vec3& right)
 }
 void Mat4::setReflection(const Vec3& planeNormal)
 {
-
+	elements[0][0] = 1 - 2 * planeNormal.x * planeNormal.x;
+	elements[1][1] = 1 - 2 * planeNormal.y * planeNormal.y;
+	elements[2][2] = 1 - 2 * planeNormal.z * planeNormal.z;
+	elements[1][0] = elements[0][1] = -2 * planeNormal.x * planeNormal.y;
+	elements[2][0] = elements[0][2] = -2 * planeNormal.x * planeNormal.z;
+	elements[1][2] = elements[2][1] = -2 * planeNormal.y * planeNormal.z;
 }
-
 //operators
 bool Mat4::operator==(const Mat4& other)
 {

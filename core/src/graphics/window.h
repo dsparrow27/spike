@@ -52,6 +52,7 @@ public:
 private:
 	bool init(); // initialize the window
 	// set up callbacks
+	friend void windowResize(GLFWwindow *window, int width, int height);
 	friend void key_callback(GLFWwindow* window, int key, int scanCode, int action, int mods);
 	friend void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	friend void cursor_position_callback(GLFWwindow* window, double xPos, double yPos);

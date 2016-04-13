@@ -1,9 +1,8 @@
 #pragma once
 
-#define _USE_MATH_DEFINES
-#include "maths.h"
+#include "Vec3.h"
+#include "Vec4.h"
 #include "mathsFunc.h"
-#include "vec3.h"
 
 /*
 	This matrix 4x4 class is for use in right hand coordinate spaces with y up.
@@ -11,6 +10,7 @@
 	A row is in stride positions (elements[0][0], elements[1][0], elements[2][0], elements[3][0]).
 	
 	Translations are stored in the last column
+	hmm should write this as a 1Dimension array so that opengl etc is fully compatible
 */
 struct Mat4
 {
@@ -19,6 +19,7 @@ struct Mat4
 		float elements[4][4];
 		Vec4 column[4];
 	};
+	float mArray[16]; // temp
 	//constructors
 	Mat4() { asIdentity(); }
 	Mat4(float diagonal);
@@ -49,7 +50,7 @@ struct Mat4
 	Vec3 getRightVector() { return Vec3(elements[2][0], elements[2][1], elements[2][2]);}
 	Vec3 getTranslation() const;
 	Vec3 getScale() const;
-
+	void getAsArray(); //temp
 	//setters
 	Mat4& asIdentity();
 	void setColumn(int i, const Vec3& column);
@@ -80,6 +81,5 @@ struct Mat4
 	Mat4 operator+(const Mat4& other) const;
 	Mat4 operator-(const Mat4& other) const;
 	Mat4 operator-(const Vec3& other) const;
-
 
 };

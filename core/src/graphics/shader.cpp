@@ -119,7 +119,8 @@ void Shader::setUniform4f(const GLchar* name, const Vec4& vector)
 {
 	glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
 }
-void Shader::setUniformMat4(const GLchar* name, const Mat4& matrix)
+void Shader::setUniformMat4(const GLchar* name, Mat4& matrix)
 {
-	glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, matrix.elements);
+	matrix.getAsArray(); // super temp
+	glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, matrix.mArray);
 }

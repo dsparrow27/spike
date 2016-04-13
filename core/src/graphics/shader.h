@@ -29,7 +29,7 @@ public:
 	void setUniform2f(const GLchar* name, const Vec2& vector);
 	void setUniform3f(const GLchar* name, const Vec3& vector);
 	void setUniform4f(const GLchar* name, const Vec4& vector);
-	void setUniformMat4(const GLchar* name, const Mat4& matrix);
+	void setUniformMat4(const GLchar* name, Mat4& matrix); // matrix should be const
 	// enables the usage of the program
 	void enable() const;
 	// disables the shader

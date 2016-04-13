@@ -1,8 +1,7 @@
 #pragma once
-#define _USE_MATH_DEFINES
+#include "mathsFunc.h"
+#include "Vec3.h"
 
-#include <math.h>
-#include "vec3.h"
 
 class Quaternion
 {
@@ -15,10 +14,14 @@ public:
 
 public:
 	Quaternion inverted() const;
-	Quaternion slerp(const Quaternion& r, float t) const;
-	Quaternion operator*(const Quaternion& q) const;
-	Quaternion operator^(const Quaternion& q) const;
-	Quaternion operator*(const Vec3& p) const;
+	// spherical linear interpolation of a quaternion
+	Quaternion slerp(const Quaternion& other, float t) const;
 	void toAxisAngle(Vec3& axis, float& angle) const;
+	//merges two quaternions together
+	Quaternion operator*(const Quaternion& q) const;
+	//The fraction of the rotation of the quaternion
+	Quaternion operator^(float q) const;
+	// rotates a vector by this quaternion
+	Vec3 operator*(const Vec3& p) const;
 
 };

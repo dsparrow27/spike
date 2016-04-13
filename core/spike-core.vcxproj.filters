@@ -31,10 +31,8 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\graphics\model.cpp" />
     <ClCompile Include="src\graphics\mesh.cpp" />
-    <ClCompile Include="src\graphics\camera.cpp" />
     <ClCompile Include="src\maths\quaternion.cpp" />
     <ClCompile Include="src\graphics\texture.cpp" />
-    <ClCompile Include="src\mat4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\fileUtils.h">
@@ -75,7 +73,6 @@
     <ClInclude Include="src\graphics\rendering\renderer2d.h" />
     <ClInclude Include="src\graphics\mesh.h" />
     <ClInclude Include="src\graphics\model.h" />
-    <ClInclude Include="src\graphics\camera.h" />
     <ClInclude Include="src\maths\quaternion.h" />
     <ClInclude Include="src\graphics\texture.h" />
   </ItemGroup>
