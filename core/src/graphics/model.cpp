@@ -65,7 +65,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		{
 		vertex.normal = Vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
 		}
-		/*
+		
 		if (mesh->mTextureCoords[0])
 		{
 			vertex.texCoords = Vec3(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y, mesh->mTextureCoords[0][i].z);
@@ -74,7 +74,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		{
 			vertex.texCoords = Vec3(0.0, 0.0, 0.0);
 		}
-		*/
+		
 		vertices.push_back(vertex);
 	}
 	//retrive the vertice indices for each face

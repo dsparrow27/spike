@@ -3,7 +3,7 @@
 #include "graphics\window.h"
 #include "graphics/shader.h"
 #include "graphics/model.h"
-
+#include "graphics/cameras/camera.h"
 // Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
 Vec3 lightPos(3.0,5.0,0.0);

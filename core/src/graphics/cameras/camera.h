@@ -2,7 +2,8 @@
 #pragma once
 
 #include "../../maths/maths.h"
-
+// base Camera class that handles generic functions, transforms are currently temp til 
+// i inplement transform class
 
 class Camera
 {
