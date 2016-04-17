@@ -16,11 +16,13 @@ private:
 	float mFov;
 	float mNearPlane;
 	float mFarPlane;
+	float movementSensivity;
 
 public:
 	Camera() {}
 	Camera(const Mat4 projectionMatrix);
 	bool onKeyBoard(int key);
+	
 	//setters
 	void setUpVector(Vec3 upVector) { mUpVector = upVector; }
 	void setFov(float fov) { mFov = fov; }

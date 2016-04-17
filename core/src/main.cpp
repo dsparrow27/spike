@@ -29,21 +29,21 @@ int main()
 	{
 		window.clear();
 		// temp
-		if (window.mKeys[GLFW_KEY_UP])
+		if (window.mKeys[GLFW_KEY_W])
 		{
-			window.camera.onKeyBoard(GLFW_KEY_UP);
+			window.camera.onKeyBoard(GLFW_KEY_W);
 		}
-		else if (window.mKeys[GLFW_KEY_DOWN])
+		else if (window.mKeys[GLFW_KEY_S])
 		{
-			window.camera.onKeyBoard(GLFW_KEY_DOWN);
+			window.camera.onKeyBoard(GLFW_KEY_S);
 		}
-		else if (window.mKeys[GLFW_KEY_LEFT])
+		else if (window.mKeys[GLFW_KEY_A])
 		{
-			window.camera.onKeyBoard(GLFW_KEY_LEFT);
+			window.camera.onKeyBoard(GLFW_KEY_A);
 		}
-		else if (window.mKeys[GLFW_KEY_RIGHT])
+		else if (window.mKeys[GLFW_KEY_D])
 		{
-			window.camera.onKeyBoard(GLFW_KEY_RIGHT);
+			window.camera.onKeyBoard(GLFW_KEY_D);
 		}
 
 		position.setRotation(rotation, Vec3(0.0, 1.0, 0.0));
