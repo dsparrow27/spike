@@ -5,6 +5,7 @@
 #include <GLFW\glfw3.h>
 #include <iostream>
 #include "../maths/maths.h"
+#include "cameras\camera.h"
 #define MAX_KEYS 1024
 #define MAX_BUTTONS 32
 
@@ -13,8 +14,7 @@ class Window
 private:
 	//windows settings
 	bool mClosed; // is window closed
-	bool mKeys[MAX_KEYS];
-	bool mMouseButtons[MAX_BUTTONS];
+	
 	bool mIsResizeable;
 	int mWidth, mHeight; // window height/ width
 	const char *mTitle; //window title
@@ -22,9 +22,15 @@ private:
 public:
 	GLFWwindow *mWindow; // window 
 	double mx, my; // xy positions of the window
+	Camera camera;
 public:
+	
 	Window(const char *name, int width, int height);
 	~Window();
+	
+	void setCamera(Camera newCamera) { camera = newCamera; }
+	bool mKeys[MAX_KEYS];
+	bool mMouseButtons[MAX_BUTTONS];
 	bool closed() const; // for closing our window
 	void clear() const;
 	void update();

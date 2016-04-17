@@ -3,6 +3,7 @@
 #include "Vec3.h"
 #include "Vec4.h"
 #include "mathsFunc.h"
+#include <iostream>
 
 /*
 	This matrix 4x4 class is for use in right hand coordinate spaces with y up.
@@ -74,12 +75,13 @@ struct Mat4
 	Mat4& operator=(const Mat4& other);
 	Mat4& operator*=(const Mat4& other);
 	Mat4& operator+=(const Vec3& other);
+	Mat4& operator-=(const Vec3& other);
 	Mat4 operator*(const Mat4& other) const;
 	Mat4 operator*(float f) const;
 	Vec3 operator*(const Vec3& other) const;
 	Vec4 operator*(const Vec4& other) const;
 	Mat4 operator+(const Mat4& other) const;
+	Mat4 operator+(const Vec3& other) const;
 	Mat4 operator-(const Mat4& other) const;
 	Mat4 operator-(const Vec3& other) const;
-
 };

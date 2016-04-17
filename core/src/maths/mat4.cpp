@@ -68,9 +68,11 @@ bool Mat4::isIdentity() const
 }
 Mat4 Mat4::inverse()
 {
+
 	Mat4 newMat;
+	//transpose the 3x3
 	for (int i = 0; i < 3; i++)
-		for (int j = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
 		{
 			newMat.elements[i][j] = elements[j][i];
 		}
@@ -98,18 +100,19 @@ Mat4 Mat4::projectOrthographic(float left, float right, float top, float bottom,
 }
 Mat4 Mat4::projectPerspective(float fov, float aspectRatio, float near, float far)
 {
+
 	float tanThetaOver = tan(toRadians(fov));
 	Mat4 m;
 	m.asIdentity();
 	//xy scale
-	m.elements[0][0] = 1 / tanThetaOver;
-	m.elements[1][1] = aspectRatio / tanThetaOver;
+	m.elements[0][0] = 1 / tanThetaOver / aspectRatio;
+	m.elements[1][1] = tanThetaOver;
 
 	//z makes z-1 for the rear plane and +1 for the far plane
-	m.elements[2][2] = (near + far) / (near - far);
-	m.elements[3][2] = -((2 * near * far) / (near - far));
+	m.elements[2][2] = -(far + near) / (far - near);
+	m.elements[3][2] = ((2 * far * near) / (far - near));
 	// w=-1 so that [xyz-z], homogenous vector that becomes [-x/z -y/z -1] after division by w
-	m.elements[2][3] = 1;
+	m.elements[2][3] = -1;
 	//zero out
 	m.elements[3][3] = 0;
 
@@ -147,7 +150,7 @@ Mat4 Mat4::projectFrustum(float left, float right, float bottom, float top, floa
 Mat4 Mat4::constructCameraView(const Vec3& position, const Vec3& direction, const Vec3& upVector)
 {
 	Vec3 vecRight = direction.cross(upVector).normalized();
-	Vec3 vecCameraUp = vecRight.cross(direction);
+	Vec3 vecCameraUp = vecRight.cross(direction).normalized();
 
 	return Mat4(vecRight, vecCameraUp, -direction, position).inverse();
 }
@@ -225,6 +228,7 @@ void Mat4::getAsArray()
 //setters
 void Mat4::setColumn(int i, const Vec3& column)
 {
+	
 	elements[i][0] = column.x;
 	elements[i][1] = column.y;
 	elements[i][2] = column.z;
@@ -345,6 +349,13 @@ Mat4& Mat4::operator+=(const Vec3& other)
 	elements[3][2] += other.x;
 	return *this;
 }
+Mat4& Mat4::operator-=(const Vec3& other)
+{
+	elements[3][0] -= other.x;
+	elements[3][1] -= other.x;
+	elements[3][2] -= other.x;
+	return *this;
+}
 Mat4 Mat4::operator*(const Mat4& other) const
 {
 	Mat4 result;
@@ -398,6 +409,14 @@ Mat4 Mat4::operator+(const Mat4& other) const
 			result.elements[i][j] = elements[i][j] + other.elements[i][j];
 		}
 	}
+	return result;
+}
+Mat4 Mat4::operator+(const Vec3& other) const
+{
+	Mat4 result = *this;
+	result.elements[3][0] += other.x;
+	result.elements[3][1] += other.y;
+	result.elements[3][2] += other.z;
 	return result;
 }
 Mat4 Mat4::operator-(const Mat4& other) const

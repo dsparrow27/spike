@@ -35,6 +35,7 @@ struct Vec3
 	Vec3& operator+=(const Vec3& other);
 	Vec3& operator-=(const Vec3& other);
 	Vec3& operator*=(const Vec3& other);
+	Vec3& operator*=(const float other);
 	Vec3& operator/=(const Vec3& other);
 	
 	// str

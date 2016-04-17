@@ -33,6 +33,7 @@
     <ClCompile Include="src\graphics\mesh.cpp" />
     <ClCompile Include="src\maths\quaternion.cpp" />
     <ClCompile Include="src\graphics\texture.cpp" />
+    <ClCompile Include="src\graphics\cameras\camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\fileUtils.h">
@@ -75,6 +76,7 @@
     <ClInclude Include="src\graphics\model.h" />
     <ClInclude Include="src\maths\quaternion.h" />
     <ClInclude Include="src\graphics\texture.h" />
+    <ClInclude Include="src\graphics\cameras\camera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\lamp.frag" />

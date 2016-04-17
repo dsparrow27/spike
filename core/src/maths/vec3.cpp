@@ -123,6 +123,14 @@ Vec3& Vec3::operator*=(const Vec3& other)
 	return *this;
 }
 
+Vec3& Vec3::operator*=(const float other)
+{
+	this->x *= other;
+	this->y *= other;
+	this->z *= other;
+	return *this;
+}
+
 Vec3& Vec3::operator/=(const Vec3& other)
 {
 	this->x /= other.x;
