@@ -46,7 +46,7 @@ int main()
 			window.camera.onKeyBoard(GLFW_KEY_D);
 		}
 
-		position.setRotation(rotation, Vec3(0.0, 1.0, 0.0));
+		//position.setRotation(rotation, Vec3(0.0, 1.0, 0.0));
 		lightingShader.enable();
 		lightingShader.setUniform3f("lightPos", position1.getTranslation());
 		lightingShader.setUniform3f("objectColor", Vec3(1.0, 1.0, 0.31));

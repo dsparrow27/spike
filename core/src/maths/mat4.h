@@ -7,9 +7,6 @@
 
 /*
 	This matrix 4x4 class is for use in right hand coordinate spaces with y up.
-	A column is a sequential memory positions (elements[0][0], elements[0][1], elements[0][2], elements[0][3]).
-	A row is in stride positions (elements[0][0], elements[1][0], elements[2][0], elements[3][0]).
-	
 	Translations are stored in the last column
 	hmm should write this as a 1Dimension array so that opengl etc is fully compatible
 */
@@ -51,7 +48,7 @@ struct Mat4
 	Vec3 getRightVector() { return Vec3(elements[2][0], elements[2][1], elements[2][2]);}
 	Vec3 getTranslation() const;
 	Vec3 getScale() const;
-	void getAsArray(); //temp
+	void asArray(); //temp
 	//setters
 	Mat4& asIdentity();
 	void setColumn(int i, const Vec3& column);

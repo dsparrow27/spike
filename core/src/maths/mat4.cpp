@@ -179,8 +179,8 @@ Vec3 Mat4::transformDirection(const Vec3 v) const
 {
 	Vec3 result;
 	result.x = elements[0][0] * v.x + elements[1][0] * v.y + elements[2][0] * v.z;
-	result.x = elements[0][1] * v.x + elements[1][1] * v.y + elements[2][1] * v.z;
-	result.x = elements[0][2] * v.x + elements[1][2] * v.y + elements[2][2] * v.z;
+	result.y = elements[0][1] * v.x + elements[1][1] * v.y + elements[2][1] * v.z;
+	result.z = elements[0][2] * v.x + elements[1][2] * v.y + elements[2][2] * v.z;
 	return result;
 }
 Mat4 Mat4::transposed() const
@@ -213,7 +213,7 @@ Vec3 Mat4::getScale() const
 {
 	return Vec3(elements[0][0], elements[1][1], elements[2][2]);
 }
-void Mat4::getAsArray()
+void Mat4::asArray()
 {
 	int index = 0;
 	for (int i = 0; i < 4; i++)
